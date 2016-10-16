@@ -1,16 +1,58 @@
 <!doctype html>
-<html data-ng-app="medsisApp">
+<html language="en" data-ng-app="medsisApp">
 <head>
   <meta charset="utf-8">
   <title>Customers</title>
+  <!--angular libs-->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
   <script src="https://code.angularjs.org/1.5.8/angular-route.min.js"></script>
+  <script src="https://code.angularjs.org/1.5.8/angular-animate.min.js"></script>
+  <script src="https://code.angularjs.org/1.5.8/angular-touch.min.js"></script>
+  <!--Bootstrap Styles-->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
 </head>
 <body>
-  <label>Medisis Test Web App!</label>
   <!--Views holder-->
-  <div class="container" data-ng-view></div>
+  <!--<div class="container" data-ng-view></div>-->
+  <div class="container" data-ng-controller="LoadUsersController">
+    <h1>Medisis Test Web App!</h1>
+    User Name:
+    <input type="text" data-ng-model="name"  placeholder="Search by UserName"/>
+    <label>Hello {{name}}!</label>
+    </br/>
+    <h3>Select to get user information:</h3>
+    <div data-ng-controller="PaginationDemoCtrl">
+    <ol>
+      <li
+       data-ng-repeat="customer in customers.slice(((bigCurrentPage-1)*listLimit), ((bigCurrentPage)*listLimit))
+       | filter:name | orderBy:age" >
+          <button type="button" data-ng-controller="CollapseDemoCtrl"
+           class="btn btn-default"
+           data-ng-click="getCustomerInfo(customer, isCollapsed)">
+           {{customer.username}}
+         </button>
+         <div uib-collapse="isCollapsed">
+            <div data-ng-model="selected"
+            data-ng-show="customer.id == selected.id"
+            class="well well-lg">
+              <ul data-ng-repeat="(key, value) in selected" data-ng-show="key != 'id'">
+                <b>*{{key | uppercase }}</b> <br/>
+                {{ value }}
+              </ul>
+            </div>
+        </div>
+      </li>
+    </ol>
+    <ul uib-pagination total-items="bigTotalItems" data-ng-model="bigCurrentPage"
+    max-size="maxSize" class="pagination-sm" boundary-links="true" num-pages="numPages"
+    data-ng-change="pageChanged()"></ul>
+    </div>
+  </div>
   <!--App Libraries-->
+  <script src="app/shared/ui-bootstrap-tpls-2.2.0.min.js"></script>
   <script src="app/app.js"></script>
   <script src="app/routers.js"></script>
   <script src="app/module.js"></script>
