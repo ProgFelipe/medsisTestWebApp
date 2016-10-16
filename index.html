@@ -8,19 +8,87 @@
   <script src="https://code.angularjs.org/1.5.8/angular-route.min.js"></script>
   <script src="https://code.angularjs.org/1.5.8/angular-animate.min.js"></script>
   <script src="https://code.angularjs.org/1.5.8/angular-touch.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
+
   <!--Bootstrap Styles-->
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+  <style>
+  .typeahead-demo .custom-popup-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    background-color: #f9f9f9;
+  }
+
+  .typeahead-demo .custom-popup-wrapper > .message {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    color: #868686;
+  }
+
+  .typeahead-demo .custom-popup-wrapper > .dropdown-menu {
+    position: static;
+    float: none;
+    display: block;
+    min-width: 160px;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+</style>
 </head>
 <body>
   <!--Views holder-->
   <!--<div class="container" data-ng-view></div>-->
   <div class="container" data-ng-controller="LoadUsersController">
     <h1>Medisis Test Web App!</h1>
-    User Name:
-    <input type="text" data-ng-model="name"  placeholder="Search by UserName"/>
+    <div ng-controller="TypeaheadCtrl">
+      <label>Search all customers:</label>
+        <input type="text" ng-model="asyncSelected" placeholder="Search by UserName"
+         uib-typeahead="item as item.username for item in getLocation($viewValue)"
+         typeahead-on-select="onSelectedCustomer($item, $model, $label)"
+         typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+        <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+        <div ng-show="noResults">
+          <i class="glyphicon glyphicon-remove"></i> No Results Found
+        </div>
+
+        <div class="custom-popup-wrapper"
+           ng-style="{top: position().top+'px', left: position().left+'px'}"
+           style="display: block;"
+           ng-show="isOpen() && !moveInProgress"
+           aria-hidden="{{!isOpen()}}">
+          <p class="message">select customer from drop down.</p>
+          <ul class="dropdown-menu" role="listbox">
+            <li class="uib-typeahead-match" ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }"
+              ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="{{::match.id}}">
+              <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
+            </li>
+          </ul>
+        </div>
+        <div uib-collapse="isCollapsed" data-ng-show="autocompleteDetailVisibility">
+           <div data-ng-model="selected" class="well well-lg">
+             <ul data-ng-repeat="(key, value) in selected" data-ng-show="key != 'id'">
+               <b>*{{key | uppercase }}</b> <br/>
+               {{ value }}
+             </ul>
+             <button type="button"
+              class="btn btn-default"
+              data-ng-click="onHideDetail()">
+              Hide Info
+            </button>
+           </div>
+       </div>
+    </div>
+    <label>Search customer in list:</label>
+    <input ng-model="name" type="text"
+    placeholder="Search by UserName" class="form-control"/>
     <label>Hello {{name}}!</label>
     </br/>
     <h3>Select to get user information:</h3>
@@ -31,7 +99,7 @@
        | filter:name | orderBy:age" >
           <button type="button" data-ng-controller="CollapseDemoCtrl"
            class="btn btn-default"
-           data-ng-click="getCustomerInfo(customer, isCollapsed)">
+           data-ng-click="getCustomerInfo(customer, isCollapsed)" id="{{::customer.id}}">
            {{customer.username}}
          </button>
          <div uib-collapse="isCollapsed">
@@ -56,5 +124,27 @@
   <script src="app/app.js"></script>
   <script src="app/routers.js"></script>
   <script src="app/module.js"></script>
+  <script type="text/ng-template" id="customTemplate.html">
+    <a>
+        <img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" width="16">
+        <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+    </a>
+  </script>
+  <script type="text/ng-template" id="customPopupTemplate.html">
+    <div class="custom-popup-wrapper"
+       ng-style="{top: position().top+'px', left: position().left+'px'}"
+       style="display: block;"
+       ng-show="isOpen() && !moveInProgress"
+       aria-hidden="{{!isOpen()}}">
+      <p class="message">select location from drop down.</p>
+
+      <ul class="dropdown-menu" role="listbox">
+        <li class="uib-typeahead-match" ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }"
+          ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="{{::match.id}}">
+          <div uib-typeahead-match index="$index" match="match" query="query" template-url="templateUrl"></div>
+        </li>
+      </ul>
+    </div>
+  </script>
 </body>
 </html>
