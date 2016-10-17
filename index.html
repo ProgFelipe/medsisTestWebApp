@@ -78,11 +78,10 @@
           <button type="button" data-ng-controller="CollapseDemoCtrl"
           style="width: 95%; margin-top: 2px"
           class="btn btn-default"
-           data-ng-click="getCustomerInfo(customer, isCollapsed)"
-           ng-animate="'animate'">
+           data-ng-click="getCustomerInfo(customer, isCollapsed)">
            {{customer.username}}
          </button>
-            <div  uib-collapse="isCollapsed"  id="{{::customer.id}}"
+            <div  ng-animate="'animate'" uib-collapse="isCollapsed"  id="{{::customer.id}}"
             data-ng-model="selected"
             data-ng-show="customer.id == selected.id"
             class="well well-lg">
