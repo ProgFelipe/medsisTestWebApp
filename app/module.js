@@ -2,7 +2,7 @@
 app.controller('LoadUsersController', function($scope, $http) {
   /*
   *http://jsonplaceholder.typicode.com/users?username=Bret
-  *This service doesnt provide function to autocomplete
+  *This service doesn't provide function to autocomplete
   *requires the full username to show data
   */
   $http.get('http://jsonplaceholder.typicode.com/users/').
@@ -10,7 +10,7 @@ app.controller('LoadUsersController', function($scope, $http) {
           $scope.customers = response.data;
           $scope.totalItems = $scope.customers.length;
           //PaginationCtrl
-          $scope.listLimit = 5;
+          $scope.listLimit = 10;
           $scope.maxSize = Math.ceil($scope.customers.length / $scope.listLimit);
           $scope.bigTotalItems = $scope.totalItems * 2;
       });
@@ -30,7 +30,6 @@ app.controller('CollapseDemoCtrl', function ($scope) {
 
 //Custom https://angular-ui.github.io/bootstrap/#/pagination
 app.controller('PaginationDemoCtrl', function ($scope, $log) {
-
   $scope.pageChanged = function() {
     $log.log('Page changed to: ' + $scope.bigCurrentPage);
   };
@@ -39,20 +38,17 @@ app.controller('PaginationDemoCtrl', function ($scope, $log) {
 
 //http://angular-ui.github.io/bootstrap/#/typeahead
 app.controller('TypeaheadCtrl', function($scope, $filter, $log) {
-
   var _selected;
   $scope.selected;
   $scope.autocompleteDetail = false;
   $scope.filterParams = {
               order: 'username'
               };
-
   $scope.onSelectedCustomer = function($item, $model, $label){
     $log.log($item);
     $scope.autocompleteDetailVisibility = true;
     $scope.selected = $item;
   };
-
   $scope.onHideDetail = function(){
     $scope.autocompleteDetailVisibility = false;
   }

@@ -1,6 +1,7 @@
 <!doctype html>
 <html language="en" data-ng-app="medsisApp">
 <head>
+  <!--@Created By Felipe Guti-->
   <meta charset="utf-8">
   <title>Customers</title>
   <!--angular libs-->
@@ -9,12 +10,12 @@
   <script src="https://code.angularjs.org/1.5.8/angular-animate.min.js"></script>
   <script src="https://code.angularjs.org/1.5.8/angular-touch.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
-
   <!--Bootstrap Styles-->
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+  <!-- AutoComplete Style -->
   <style>
   .typeahead-demo .custom-popup-wrapper {
     position: absolute;
@@ -45,9 +46,11 @@
 </head>
 <body>
   <!--Views holder-->
+  <!-- For Routing purpose -->
   <!--<div class="container" data-ng-view></div>-->
   <div class="container" data-ng-controller="LoadUsersController">
     <h1>Medisis Test Web App!</h1>
+    <!--AutoComplete-->
     <div ng-controller="TypeaheadCtrl">
       <label>Search all customers:</label>
         <input type="text" ng-model="asyncSelected" placeholder="Search by UserName"
@@ -86,6 +89,7 @@
            </div>
        </div>
     </div>
+    <!--Search in List -->
     <label>Search customer in list:</label>
     <input ng-model="name" type="text"
     placeholder="Search by UserName" class="form-control"/>
@@ -99,10 +103,10 @@
        | filter:name | orderBy:age" >
           <button type="button" data-ng-controller="CollapseDemoCtrl"
            class="btn btn-default"
-           data-ng-click="getCustomerInfo(customer, isCollapsed)" id="{{::customer.id}}">
+           data-ng-click="getCustomerInfo(customer, isCollapsed)">
            {{customer.username}}
          </button>
-         <div uib-collapse="isCollapsed">
+         <div uib-collapse="isCollapsed" id="{{::customer.id}}">
             <div data-ng-model="selected"
             data-ng-show="customer.id == selected.id"
             class="well well-lg">
