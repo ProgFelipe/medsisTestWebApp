@@ -12,7 +12,7 @@
   <script src="https://code.angularjs.org/1.5.8/angular-touch.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
   <!--Bootstrap Styles-->
-  <link rel="stylesheet" href="styles/customers.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="app/styles/customers.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
   <!-- Optional theme -->
@@ -28,10 +28,10 @@
     <div ng-controller="TypeaheadCtrl">
       <label>Search all customers:</label>
         <input type="text" ng-model="asyncSelected" placeholder="Search by UserName"
-         uib-typeahead="item as item.username for item in getLocation($viewValue)"
+         uib-typeahead="item as item.username for item in getFilteringCustomers($viewValue)"
          typeahead-on-select="onSelectedCustomer($item, $model, $label)"
-         typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-        <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+         typeahead-loading="loadingCustomers" typeahead-no-results="noResults" class="form-control">
+        <i ng-show="loadingCustomers" class="glyphicon glyphicon-refresh"></i>
         <div ng-show="noResults">
           <i class="glyphicon glyphicon-remove"></i> No Results Found
         </div>
@@ -87,7 +87,7 @@
             class="well well-lg">
               <ul data-ng-repeat="(key, value) in selected" data-ng-show="key != 'id'">
                 <b>*{{key | uppercase }}</b> <br/>
-                <p>{{ value }}</p>
+                <p style="word-wrap: break-word;">{{ value }}</p>
               </ul>
             </div>
       </li>
@@ -115,7 +115,6 @@
        ng-show="isOpen() && !moveInProgress"
        aria-hidden="{{!isOpen()}}">
       <p class="message">select location from drop down.</p>
-
       <ul class="dropdown-menu" role="listbox">
         <li class="uib-typeahead-match" ng-repeat="match in matches track by $index" ng-class="{active: isActive($index) }"
           ng-mouseenter="selectActive($index)" ng-click="selectMatch($index)" role="option" id="{{::match.id}}">

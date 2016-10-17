@@ -53,7 +53,7 @@ app.controller('TypeaheadCtrl', function($scope, $filter, $log) {
     $scope.autocompleteDetailVisibility = false;
   }
   // Any function returning a promise object can be used to load values asynchronously
-  $scope.getLocation = function(val) {
+  $scope.getFilteringCustomers = function(val) {
     var filteredData = $filter('filter')($scope.customers, {username: val});
     filteredData = $filter('orderBy')(filteredData, $scope.filterParams.order);
     var usersNames;
@@ -66,7 +66,7 @@ app.controller('TypeaheadCtrl', function($scope, $filter, $log) {
     }).then(function(response){
       if(response.data.results != null){
         return response.data.results.map(function(item){
-        return item.formatted_address;
+        return item.somefilter;
       });
       }else{
         return response.data;
